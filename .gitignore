@@ -1,0 +1,13 @@
+# Python build cache and virtual environments
+backend/__pycache__/
+.venv/
+
+# Editor-specific settings
+.vscode/
+
+# Next.js build output and local environment variables
+frontend/.next/
+frontend/.env.local
+
+# Node.js dependencies (downloaded libraries)
+frontend/node_modules/
