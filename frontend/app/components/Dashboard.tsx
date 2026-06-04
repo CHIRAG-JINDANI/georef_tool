@@ -5,6 +5,7 @@ import MapPanel from './MapPanel'
 import ControlPanel from './ControlPanel'
 import LogPanel from './LogPanel'
 import ResultPanel from './ResultPanel'
+import PipelineViewer from './PipelineViewer'
 
 export type AppStage =
   | 'idle'
@@ -50,6 +51,8 @@ export default function Dashboard() {
   const [result, setResult] = useState<ProcessingResult | null>(null)
   const [logs, setLogs] = useState<LogEntry[]>([])
   const [imageType, setImageType] = useState<'sharp' | 'medium' | 'blurry' | null>(null)
+  const [stepImages, setStepImages] = useState<Record<number, string>>({})
+  const [viewerOpen, setViewerOpen] = useState(false)
 
   useEffect(() => {
     setLogs([
@@ -96,6 +99,7 @@ export default function Dashboard() {
     if (!referenceFile || !capturedProxy || !imageType) return
     setStage('processing')
     setResult(null)
+    setStepImages({})
     addLog('info', 'dispatching to python pipeline...')
 
     try {
@@ -136,6 +140,9 @@ export default function Dashboard() {
 
           if (payload.type === 'log') {
             addLog('dim', payload.msg)
+          } else if (payload.type === 'step_img') {
+            // Capture step images as they arrive — no stage change, no disruption
+            setStepImages(prev => ({ ...prev, [payload.step]: payload.img }))
           } else if (payload.type === 'error') {
             throw new Error(payload.msg)
           } else if (payload.type === 'result') {
@@ -166,6 +173,8 @@ export default function Dashboard() {
     setReferenceFile(null)
     setReferencePreview(null)
     setResult(null)
+    setStepImages({})
+    setViewerOpen(false)
     setLogs([
       { type: 'dim', msg: 'session reset', ts: Date.now() },
       { type: 'dim', msg: 'navigate map → capture proxy → upload reference → run', ts: Date.now() },
@@ -173,108 +182,122 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: '320px 1fr 280px',
-      gridTemplateRows: '48px 1fr',
-      height: '100vh',
-      background: 'var(--bg-primary)',
-      gap: 0,
-    }}>
-      <header style={{
-        gridColumn: '1 / -1',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 20px',
-        background: 'var(--bg-secondary)',
-        borderBottom: '1px solid var(--border)',
-        zIndex: 10,
+    <>
+      {/* Pipeline viewer — full screen overlay, only when open */}
+      {viewerOpen && (
+        <PipelineViewer
+          stepImages={stepImages}
+          onClose={() => setViewerOpen(false)}
+        />
+      )}
+
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '320px 1fr 280px',
+        gridTemplateRows: '48px 1fr',
+        height: '100vh',
+        background: 'var(--bg-primary)',
+        gap: 0,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{
-            width: 28, height: 28,
-            background: 'linear-gradient(135deg, #2b6cb0, #2c7a7b)',
-            borderRadius: 6,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="white" opacity="0.9" />
-              <circle cx="12" cy="9" r="2.5" fill="#2b6cb0" />
-            </svg>
+        <header style={{
+          gridColumn: '1 / -1',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 20px',
+          background: 'var(--bg-secondary)',
+          borderBottom: '1px solid var(--border)',
+          zIndex: 10,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{
+              width: 28, height: 28,
+              background: 'linear-gradient(135deg, #2b6cb0, #2c7a7b)',
+              borderRadius: 6,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="white" opacity="0.9" />
+                <circle cx="12" cy="9" r="2.5" fill="#2b6cb0" />
+              </svg>
+            </div>
+            <span style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: 14,
+              fontWeight: 600,
+              color: 'var(--text-primary)',
+              letterSpacing: '-0.01em',
+            }}>GeoRef Studio</span>
+            <span style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: 10,
+              color: 'var(--text-muted)',
+              letterSpacing: '0.1em',
+            }}>v1.0</span>
           </div>
-          <span style={{
-            fontFamily: "'Space Grotesk', sans-serif",
-            fontSize: 14,
-            fontWeight: 600,
-            color: 'var(--text-primary)',
-            letterSpacing: '-0.01em',
-          }}>GeoRef Studio</span>
-          <span style={{
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize: 10,
-            color: 'var(--text-muted)',
-            letterSpacing: '0.1em',
-          }}>v1.0</span>
-        </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-          <StageIndicator stage={stage} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <CoordDisplay viewport={viewport} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+            <StageIndicator stage={stage} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <CoordDisplay viewport={viewport} />
+            </div>
+            <button className="btn-ghost" onClick={handleReset} style={{ fontSize: 10, padding: '5px 12px' }}>
+              reset session
+            </button>
           </div>
-          <button className="btn-ghost" onClick={handleReset} style={{ fontSize: 10, padding: '5px 12px' }}>
-            reset session
-          </button>
-        </div>
-      </header>
+        </header>
 
-      <aside style={{
-        borderRight: '1px solid var(--border)',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        background: 'var(--bg-panel)',
-      }}>
-        <ControlPanel
-          stage={stage}
-          viewport={viewport}
-          capturedProxy={capturedProxy}
-          referencePreview={referencePreview}
-          referenceFile={referenceFile}
-          imageType={imageType}
-          setImageType={setImageType}
-          onCapture={handleCapture}
-          onUpload={handleReferenceUpload}
-          onProcess={handleProcess}
-        />
-      </aside>
+        <aside style={{
+          borderRight: '1px solid var(--border)',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          background: 'var(--bg-panel)',
+        }}>
+          <ControlPanel
+            stage={stage}
+            viewport={viewport}
+            capturedProxy={capturedProxy}
+            referencePreview={referencePreview}
+            referenceFile={referenceFile}
+            imageType={imageType}
+            setImageType={setImageType}
+            onCapture={handleCapture}
+            onUpload={handleReferenceUpload}
+            onProcess={handleProcess}
+          />
+        </aside>
 
-      <main style={{ position: 'relative', overflow: 'hidden' }}>
-        <MapPanel
-          stage={stage}
-          viewport={viewport}
-          result={result}
-          onViewportChange={handleViewportChange}
-        />
-      </main>
+        <main style={{ position: 'relative', overflow: 'hidden' }}>
+          <MapPanel
+            stage={stage}
+            viewport={viewport}
+            result={result}
+            onViewportChange={handleViewportChange}
+          />
+        </main>
 
-      <aside style={{
-        borderLeft: '1px solid var(--border)',
-        display: 'flex',
-        flexDirection: 'column',
-        background: 'var(--bg-panel)',
-        overflow: 'hidden',
-      }}>
-        <ResultPanel
-          stage={stage}
-          result={result}
-          onValidate={handleValidate}
-        />
-        <hr className="sep" />
-        <LogPanel logs={logs} />
-      </aside>
-    </div>
+        <aside style={{
+          borderLeft: '1px solid var(--border)',
+          display: 'flex',
+          flexDirection: 'column',
+          background: 'var(--bg-panel)',
+          overflow: 'hidden',
+        }}>
+          <ResultPanel
+            stage={stage}
+            result={result}
+            onValidate={handleValidate}
+          />
+          <hr className="sep" />
+          <LogPanel
+            logs={logs}
+            stepImages={stepImages}
+            onOpenViewer={() => setViewerOpen(true)}
+          />
+        </aside>
+      </div>
+    </>
   )
 }
 
