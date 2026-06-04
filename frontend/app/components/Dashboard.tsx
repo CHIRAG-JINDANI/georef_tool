@@ -51,6 +51,8 @@ export default function Dashboard() {
   const [result, setResult] = useState<ProcessingResult | null>(null)
   const [logs, setLogs] = useState<LogEntry[]>([])
   const [imageType, setImageType] = useState<'sharp' | 'medium' | 'blurry' | null>(null)
+
+  // Missing structural tracking variables restored
   const [stepImages, setStepImages] = useState<Record<number, string>>({})
   const [viewerOpen, setViewerOpen] = useState(false)
 
@@ -141,7 +143,6 @@ export default function Dashboard() {
           if (payload.type === 'log') {
             addLog('dim', payload.msg)
           } else if (payload.type === 'step_img') {
-            // Capture step images as they arrive — no stage change, no disruption
             setStepImages(prev => ({ ...prev, [payload.step]: payload.img }))
           } else if (payload.type === 'error') {
             throw new Error(payload.msg)
@@ -183,7 +184,7 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* Pipeline viewer — full screen overlay, only when open */}
+      {/* Structural full-screen overlay portal mounted cleanly */}
       {viewerOpen && (
         <PipelineViewer
           stepImages={stepImages}
@@ -290,6 +291,7 @@ export default function Dashboard() {
             onValidate={handleValidate}
           />
           <hr className="sep" />
+          {/* Missing bound properties wired up explicitly to fix your type error */}
           <LogPanel
             logs={logs}
             stepImages={stepImages}

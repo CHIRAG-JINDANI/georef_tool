@@ -17,6 +17,20 @@ export default function ResultPanel({ stage, result, onValidate }: ResultPanelPr
     a.click()
   }
 
+  const getMatchProfile = (count: number) => {
+    if (count < 30) {
+      return { label: 'Poor Match Quality', color: 'var(--accent-red)', pct: Math.min(100, (count / 30) * 100), fill: 'linear-gradient(90deg, #fc8181, #e53e3e)' }
+    } else if (count >= 30 && count < 55) {
+      return { label: 'Moderate Match Quality', color: 'var(--accent-amber)', pct: 50, fill: 'linear-gradient(90deg, #f6ad55, #ed8936)' }
+    } else if (count >= 55 && count < 75) {
+      return { label: 'Good Match Quality', color: 'var(--accent-blue)', pct: 75, fill: 'linear-gradient(90deg, #63b3ed, #4299e1)' }
+    } else {
+      return { label: 'Excellent Match Quality', color: 'var(--accent-green)', pct: 100, fill: 'linear-gradient(90deg, #68d391, #4fd1c5)' }
+    }
+  }
+
+  const profile = result ? getMatchProfile(result.inlierCount) : null
+
   return (
     <div style={{ padding: '14px 16px', flexShrink: 0 }}>
       <div className="section-label" style={{ marginBottom: 10 }}>result</div>
@@ -34,25 +48,23 @@ export default function ResultPanel({ stage, result, onValidate }: ResultPanelPr
       )}
 
       {/* Stats */}
-      {result && (
+      {result && profile && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
 
           {/* Match quality bar */}
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-              <span style={{ fontSize: 10, color: 'var(--text-muted)', fontFamily: 'monospace' }}>match quality</span>
-              <span style={{ fontSize: 10, color: result.matchScore > 0.7 ? 'var(--accent-green)' : result.matchScore > 0.4 ? 'var(--accent-amber)' : 'var(--accent-red)', fontFamily: 'monospace' }}>
-                {(result.matchScore * 100).toFixed(1)}%
+              <span style={{ fontSize: 10, color: profile.color, fontFamily: 'monospace', fontWeight: 600, textTransform: 'lowercase' }}>
+                {profile.label}
+              </span>
+              <span style={{ fontSize: 10, color: 'var(--text-secondary)', fontFamily: 'monospace' }}>
+                {result.inlierCount} pts
               </span>
             </div>
             <div className="progress-track">
               <div className="progress-fill" style={{
-                width: `${result.matchScore * 100}%`,
-                background: result.matchScore > 0.7
-                  ? 'linear-gradient(90deg, #68d391, #4fd1c5)'
-                  : result.matchScore > 0.4
-                  ? 'linear-gradient(90deg, #f6ad55, #ed8936)'
-                  : 'linear-gradient(90deg, #fc8181, #e53e3e)',
+                width: `${profile.pct}%`,
+                background: profile.fill,
               }} />
             </div>
           </div>
@@ -64,8 +76,8 @@ export default function ResultPanel({ stage, result, onValidate }: ResultPanelPr
               ['crs', 'EPSG:4326'],
               ['north', `${result.overlayBounds.north.toFixed(5)}°`],
               ['south', `${result.overlayBounds.south.toFixed(5)}°`],
-              ['east',  `${result.overlayBounds.east.toFixed(5)}°`],
-              ['west',  `${result.overlayBounds.west.toFixed(5)}°`],
+              ['east', `${result.overlayBounds.east.toFixed(5)}°`],
+              ['west', `${result.overlayBounds.west.toFixed(5)}°`],
             ].map(([k, v]) => (
               <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '2px 0' }}>
                 <span style={{ fontSize: 10, color: 'var(--text-muted)', fontFamily: 'monospace' }}>{k}</span>

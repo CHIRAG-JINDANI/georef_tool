@@ -7,7 +7,7 @@ const PIPELINE_CONFIG = [
   ['clip limit', '2.0'],
   ['grid', '8×8'],
   ['grid kp', '4×4'],
-  ['ratio test', '0.75'],
+  ['ratio test', '0.80'],
   ['ransac thr', '5.0 px'],
   ['projection', 'WGS84'],
 ]

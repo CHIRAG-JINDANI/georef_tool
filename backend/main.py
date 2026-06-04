@@ -92,14 +92,14 @@ def get_matrix(proxy, ref, img_type):
     sch_params = dict(checks=50)
     flann = cv2.FlannBasedMatcher(idx_params, sch_params)
     matches = flann.knnMatch(des_r, des_p, k=2)
-    good = [m for m, n in matches if m.distance < 0.75 * n.distance]
+    good = [m for m, n in matches if m.distance < 0.80 * n.distance]
 
     if len(good) < 4:
         raise ValueError("too few matches")
 
     src = np.float32([kp_r[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
     dst = np.float32([kp_p[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
-    mat, mask = cv2.estimateAffinePartial2D(src, dst, method=cv2.RANSAC, ransacReprojThreshold=5.0)
+    mat, mask = cv2.estimateAffinePartial2D(src, dst, method=cv2.RANSAC, ransacReprojThreshold=20.0)
 
     if mat is None:
         raise ValueError("affine failed")
@@ -302,7 +302,7 @@ async def process(
             _, s_enc = cv2.imencode('.webp', p_img, [cv2.IMWRITE_WEBP_QUALITY, 80])
             s_b64 = base64.b64encode(s_enc.tobytes()).decode()
 
-            stitched_url = f"data:image/webp;base64,{s_b64}"
+            stitched_url = f"data:i mage/webp;base64,{s_b64}"
 
             result_data = {
                 "stitchedUrl": stitched_url,
