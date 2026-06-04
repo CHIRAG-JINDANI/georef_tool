@@ -17,3 +17,4 @@ cd frontend
 npm install
 npm run dev
 --------------------------------------------
+source venv/bin/activate
