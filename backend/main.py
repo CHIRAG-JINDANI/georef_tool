@@ -162,7 +162,9 @@ async def process(
     zoom: float = Form(...),
     map_width: int = Form(640),
     map_height: int = Form(640),
-    image_type: str = Form(...)
+    image_type: str = Form(...),
+    flip_h: str = Form("false"),
+    flip_v: str = Form("false")
 ):
     if image_type not in ("sharp", "medium", "blurry"):
         raise HTTPException(status_code=400, detail="invalid type")
@@ -177,6 +179,14 @@ async def process(
 
             if ref_img is None:
                 raise ValueError("decode failed")
+
+            # --- APPLY INCOMING IMAGE FLIPS ---
+            if flip_h.lower() == "true":
+                ref_img = cv2.flip(ref_img, 1)  # 1 = Horizontal
+                yield json.dumps({"type": "log", "msg": "applied horizontal image flip"}) + "\n"
+            if flip_v.lower() == "true":
+                ref_img = cv2.flip(ref_img, 0)  # 0 = Vertical
+                yield json.dumps({"type": "log", "msg": "applied vertical image flip"}) + "\n"
 
             proxy_b = None
             async with httpx.AsyncClient(timeout=15) as client:
@@ -302,7 +312,7 @@ async def process(
             _, s_enc = cv2.imencode('.webp', p_img, [cv2.IMWRITE_WEBP_QUALITY, 80])
             s_b64 = base64.b64encode(s_enc.tobytes()).decode()
 
-            stitched_url = f"data:i mage/webp;base64,{s_b64}"
+            stitched_url = f"data:image/webp;base64,{s_b64}"
 
             result_data = {
                 "stitchedUrl": stitched_url,

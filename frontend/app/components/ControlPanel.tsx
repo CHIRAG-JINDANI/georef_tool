@@ -18,8 +18,12 @@ interface ControlPanelProps {
   capturedProxy: string | null
   referencePreview: string | null
   referenceFile: File | null
-  imageType: 'sharp' | 'medium' | 'blurry' | null // <-- ADD THIS
-  setImageType: (type: 'sharp' | 'medium' | 'blurry') => void // <-- ADD THIS
+  imageType: 'sharp' | 'medium' | 'blurry' | null
+  setImageType: (type: 'sharp' | 'medium' | 'blurry') => void
+  flipHorizontal: boolean
+  setFlipHorizontal: (val: boolean) => void
+  flipVertical: boolean
+  setFlipVertical: (val: boolean) => void
   onCapture: () => void
   onUpload: (file: File) => void
   onProcess: () => void
@@ -28,6 +32,8 @@ interface ControlPanelProps {
 export default function ControlPanel({
   stage, viewport, capturedProxy, referencePreview, referenceFile,
   imageType, setImageType,
+  flipHorizontal, setFlipHorizontal,
+  flipVertical, setFlipVertical,
   onCapture, onUpload, onProcess,
 }: ControlPanelProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -51,6 +57,12 @@ export default function ControlPanel({
 
   // Pixel resolution
   const metersPerPx = 156543.03392 * Math.cos(viewport.lat * Math.PI / 180) / Math.pow(2, viewport.zoom)
+
+  // Construct dynamic transform for live preview flipping
+  const transformStyle = [
+    flipHorizontal ? 'scaleX(-1)' : '',
+    flipVertical ? 'scaleY(-1)' : ''
+  ].filter(Boolean).join(' ') || 'none'
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
@@ -99,13 +111,12 @@ export default function ControlPanel({
           </button>
 
           {/* Proxy thumbnail */}
-          {/* Proxy thumbnail */}
           {capturedProxy && (
             <div style={{ marginTop: 10, position: 'relative', borderRadius: 6, overflow: 'hidden', border: '1px solid var(--border)' }}>
               <img
                 src={capturedProxy}
                 alt="Proxy map"
-                style={{ width: '100%', display: 'block', opacity: 1 }} // Opacity removed
+                style={{ width: '100%', display: 'block', opacity: 1 }}
                 onError={(e) => {
                   const t = e.target as HTMLImageElement
                   t.style.display = 'none'
@@ -178,39 +189,67 @@ export default function ControlPanel({
             <div style={{ marginTop: 12 }}>
               <img src={referencePreview} alt="ref" style={{
                 width: '100%', height: 120, objectFit: 'cover',
-                borderRadius: 4, border: '1px solid var(--border)'
+                borderRadius: 4, border: '1px solid var(--border)',
+                transform: transformStyle,
+                transition: 'transform 0.2s ease',
               }} />
 
-              {/* --- NEW IMAGE TYPE SELECTOR --- */}
+              {/* Image Type Selector */}
               <div style={{ marginTop: 12, padding: '10px', background: 'rgba(0,0,0,0.02)', borderRadius: 6, border: '1px solid var(--border)' }}>
                 <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 8, fontFamily: "'Space Grotesk', sans-serif" }}>
                   Select Image Quality:
                 </div>
-                <div style={{ display: 'flex', gap: 8 }}>
+                <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
                   {['sharp', 'medium', 'blurry'].map((type) => (
                     <button
                       key={type}
                       onClick={() => setImageType(type as any)}
                       style={{
-                        flex: 1,
-                        padding: '6px 0',
-                        fontSize: 11,
-                        fontFamily: "'Space Grotesk', sans-serif",
+                        flex: 1, padding: '6px 0', fontSize: 11, fontFamily: "'Space Grotesk', sans-serif",
                         background: imageType === type ? 'var(--accent-blue)' : 'white',
                         color: imageType === type ? 'white' : 'var(--text-secondary)',
                         border: `1px solid ${imageType === type ? 'var(--accent-blue)' : 'var(--border)'}`,
-                        borderRadius: 4,
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                        textTransform: 'capitalize'
+                        borderRadius: 4, cursor: 'pointer', transition: 'all 0.2s ease', textTransform: 'capitalize'
                       }}
                     >
                       {type}
                     </button>
                   ))}
                 </div>
+
+                {/* --- NEW FLIP TOGGLES --- */}
+                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 8, fontFamily: "'Space Grotesk', sans-serif" }}>
+                  Flip Image (Optional):
+                </div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button
+                    onClick={() => setFlipHorizontal(!flipHorizontal)}
+                    style={{
+                      flex: 1, padding: '6px 0', fontSize: 11, fontFamily: "'Space Grotesk', sans-serif",
+                      background: flipHorizontal ? 'var(--accent-blue)' : 'white',
+                      color: flipHorizontal ? 'white' : 'var(--text-secondary)',
+                      border: `1px solid ${flipHorizontal ? 'var(--accent-blue)' : 'var(--border)'}`,
+                      borderRadius: 4, cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4
+                    }}
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="17 9 21 13 17 17" /><polyline points="7 9 3 13 7 17" /><line x1="21" y1="13" x2="3" y2="13" /></svg>
+                    Horizontal
+                  </button>
+                  <button
+                    onClick={() => setFlipVertical(!flipVertical)}
+                    style={{
+                      flex: 1, padding: '6px 0', fontSize: 11, fontFamily: "'Space Grotesk', sans-serif",
+                      background: flipVertical ? 'var(--accent-blue)' : 'white',
+                      color: flipVertical ? 'white' : 'var(--text-secondary)',
+                      border: `1px solid ${flipVertical ? 'var(--accent-blue)' : 'var(--border)'}`,
+                      borderRadius: 4, cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4
+                    }}
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 17 13 21 17 17" /><polyline points="9 7 13 3 17 7" /><line x1="13" y1="21" x2="13" y2="3" /></svg>
+                    Vertical
+                  </button>
+                </div>
               </div>
-              {/* --- END NEW SELECTOR --- */}
 
             </div>
           )}

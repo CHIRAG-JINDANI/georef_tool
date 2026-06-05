@@ -52,7 +52,10 @@ export default function Dashboard() {
   const [logs, setLogs] = useState<LogEntry[]>([])
   const [imageType, setImageType] = useState<'sharp' | 'medium' | 'blurry' | null>(null)
 
-  // Missing structural tracking variables restored
+  // --- NEW FLIP STATES ---
+  const [flipHorizontal, setFlipHorizontal] = useState(false)
+  const [flipVertical, setFlipVertical] = useState(false)
+
   const [stepImages, setStepImages] = useState<Record<number, string>>({})
   const [viewerOpen, setViewerOpen] = useState(false)
 
@@ -115,6 +118,10 @@ export default function Dashboard() {
       formData.append('map_width', '640')
       formData.append('map_height', '640')
 
+      // --- SEND FLIP PARAMS TO BACKEND ---
+      formData.append('flip_h', String(flipHorizontal))
+      formData.append('flip_v', String(flipVertical))
+
       const resp = await fetch('/api/py/process', {
         method: 'POST',
         body: formData,
@@ -160,7 +167,7 @@ export default function Dashboard() {
       addLog('error', `pipeline failed: ${message}`)
       setStage('ready')
     }
-  }, [referenceFile, capturedProxy, viewport, imageType, addLog])
+  }, [referenceFile, capturedProxy, viewport, imageType, flipHorizontal, flipVertical, addLog])
 
   const handleValidate = useCallback(() => {
     setStage('validated')
@@ -176,6 +183,8 @@ export default function Dashboard() {
     setResult(null)
     setStepImages({})
     setViewerOpen(false)
+    setFlipHorizontal(false) // Reset flips
+    setFlipVertical(false)
     setLogs([
       { type: 'dim', msg: 'session reset', ts: Date.now() },
       { type: 'dim', msg: 'navigate map → capture proxy → upload reference → run', ts: Date.now() },
@@ -184,7 +193,6 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* Structural full-screen overlay portal mounted cleanly */}
       {viewerOpen && (
         <PipelineViewer
           stepImages={stepImages}
@@ -263,6 +271,10 @@ export default function Dashboard() {
             referenceFile={referenceFile}
             imageType={imageType}
             setImageType={setImageType}
+            flipHorizontal={flipHorizontal}
+            setFlipHorizontal={setFlipHorizontal}
+            flipVertical={flipVertical}
+            setFlipVertical={setFlipVertical}
             onCapture={handleCapture}
             onUpload={handleReferenceUpload}
             onProcess={handleProcess}
@@ -291,7 +303,6 @@ export default function Dashboard() {
             onValidate={handleValidate}
           />
           <hr className="sep" />
-          {/* Missing bound properties wired up explicitly to fix your type error */}
           <LogPanel
             logs={logs}
             stepImages={stepImages}
