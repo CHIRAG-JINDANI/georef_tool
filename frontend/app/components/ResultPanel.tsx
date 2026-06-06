@@ -23,9 +23,9 @@ export default function ResultPanel({ stage, result, onValidate }: ResultPanelPr
     } else if (count >= 30 && count < 55) {
       return { label: 'Moderate Match Quality', color: 'var(--accent-amber)', pct: 50, fill: 'linear-gradient(90deg, #f6ad55, #ed8936)' }
     } else if (count >= 55 && count < 75) {
-      return { label: 'Good Match Quality', color: 'var(--accent-blue)', pct: 75, fill: 'linear-gradient(90deg, #63b3ed, #4299e1)' }
+      return { label: 'Good Match Quality', color: 'var(--accent-blue)', pct: 75, fill: 'linear-gradient(90deg, #5a8a7a, #3d6b5f)' }
     } else {
-      return { label: 'Excellent Match Quality', color: 'var(--accent-green)', pct: 100, fill: 'linear-gradient(90deg, #68d391, #4fd1c5)' }
+      return { label: 'Excellent Match Quality', color: 'var(--accent-green)', pct: 100, fill: 'linear-gradient(90deg, #3d6b5f, #5a8a7a)' }
     }
   }
 
@@ -38,7 +38,7 @@ export default function ResultPanel({ stage, result, onValidate }: ResultPanelPr
       {/* No result yet */}
       {!result && (
         <div style={{
-          fontFamily: "'JetBrains Mono', monospace",
+          fontFamily: "'Plus Jakarta Sans', sans-serif",
           fontSize: 10,
           color: 'var(--text-muted)',
           padding: '8px 0',
@@ -96,7 +96,7 @@ export default function ResultPanel({ stage, result, onValidate }: ResultPanelPr
           {stage === 'validated' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               <div style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontSize: 10,
                 color: 'var(--accent-green)',
                 textAlign: 'center',

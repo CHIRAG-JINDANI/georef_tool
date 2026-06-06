@@ -55,10 +55,8 @@ export default function ControlPanel({
   const canUpload = stage === 'captured' || stage === 'ready'
   const canProcess = stage === 'ready' && imageType !== null
 
-  // Pixel resolution
   const metersPerPx = 156543.03392 * Math.cos(viewport.lat * Math.PI / 180) / Math.pow(2, viewport.zoom)
 
-  // Construct dynamic transform for live preview flipping
   const transformStyle = [
     flipHorizontal ? 'scaleX(-1)' : '',
     flipVertical ? 'scaleY(-1)' : ''
@@ -66,25 +64,22 @@ export default function ControlPanel({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
-      {/* Header */}
       <div style={{ padding: '14px 16px 10px', borderBottom: '1px solid var(--border)' }}>
         <div className="section-label" style={{ marginBottom: 2 }}>pipeline controls</div>
       </div>
 
       <div style={{ flex: 1, overflow: 'auto', padding: '0 0 12px' }}>
 
-        {/* ── STEP 1: PROXY CAPTURE ── */}
         <StepSection
           num="01"
           title="capture proxy map"
           active={stage === 'navigating' || stage === 'idle'}
           done={!!capturedProxy}
         >
-          <p style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.6, margin: '0 0 10px', fontFamily: "'JetBrains Mono', monospace" }}>
-            Navigate the satellite map to the rough location of your reference image, then capture.
+          <p style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.6, margin: '0 0 10px', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            navigate the satellite map to the rough location of your reference image, then capture.
           </p>
 
-          {/* Viewport info */}
           <div className="card" style={{ padding: '8px 10px', marginBottom: 10 }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 0' }}>
               {[
@@ -110,12 +105,11 @@ export default function ControlPanel({
             capture proxy image
           </button>
 
-          {/* Proxy thumbnail */}
           {capturedProxy && (
             <div style={{ marginTop: 10, position: 'relative', borderRadius: 6, overflow: 'hidden', border: '1px solid var(--border)' }}>
               <img
                 src={capturedProxy}
-                alt="Proxy map"
+                alt="proxy map"
                 style={{ width: '100%', display: 'block', opacity: 1 }}
                 onError={(e) => {
                   const t = e.target as HTMLImageElement
@@ -124,11 +118,11 @@ export default function ControlPanel({
               />
               <div style={{
                 position: 'absolute', bottom: 0, left: 0, right: 0,
-                background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
+                background: 'linear-gradient(transparent, rgba(0,0,0,0.8))',
                 padding: '8px 8px 6px',
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontSize: 9,
-                color: 'rgba(104,211,145,0.9)',
+                color: 'rgba(192,132,252,0.95)',
               }}>
                 ✓ proxy locked · 640×640px satellite
               </div>
@@ -136,15 +130,14 @@ export default function ControlPanel({
           )}
         </StepSection>
 
-        {/* ── STEP 2: REFERENCE UPLOAD ── */}
         <StepSection
           num="02"
           title="upload reference"
           active={stage === 'captured' || stage === 'ready'}
           done={!!referenceFile}
         >
-          <p style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.6, margin: '0 0 10px', fontFamily: "'JetBrains Mono', monospace" }}>
-            Upload the image to be georeferenced. Any raster format works.
+          <p style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.6, margin: '0 0 10px', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            upload the image to be georeferenced. any raster format works.
           </p>
 
           <input
@@ -175,12 +168,12 @@ export default function ControlPanel({
                 <line x1="12" y1="3" x2="12" y2="15" stroke="var(--accent-blue)" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
             </div>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'var(--text-secondary)' }}>
+            <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 11, color: 'var(--text-secondary)' }}>
               {referenceFile ? referenceFile.name : 'drop image or click'}
             </div>
             {referenceFile && (
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>
-                {(referenceFile.size / 1024).toFixed(0)} KB
+              <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>
+                {(referenceFile.size / 1024).toFixed(0)} kb
               </div>
             )}
           </div>
@@ -194,10 +187,9 @@ export default function ControlPanel({
                 transition: 'transform 0.2s ease',
               }} />
 
-              {/* Image Type Selector */}
-              <div style={{ marginTop: 12, padding: '10px', background: 'rgba(0,0,0,0.02)', borderRadius: 6, border: '1px solid var(--border)' }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 8, fontFamily: "'Space Grotesk', sans-serif" }}>
-                  Select Image Quality:
+              <div style={{ marginTop: 12, padding: '10px', background: 'rgba(255,255,255,0.03)', borderRadius: 6, border: '1px solid var(--border)' }}>
+                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 8, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  select image quality:
                 </div>
                 <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
                   {['sharp', 'medium', 'blurry'].map((type) => (
@@ -205,9 +197,9 @@ export default function ControlPanel({
                       key={type}
                       onClick={() => setImageType(type as any)}
                       style={{
-                        flex: 1, padding: '6px 0', fontSize: 11, fontFamily: "'Space Grotesk', sans-serif",
-                        background: imageType === type ? 'var(--accent-blue)' : 'white',
-                        color: imageType === type ? 'white' : 'var(--text-secondary)',
+                        flex: 1, padding: '6px 0', fontSize: 11, fontFamily: "'Plus Jakarta Sans', sans-serif",
+                        background: imageType === type ? 'var(--accent-blue)' : 'var(--bg-primary)',
+                        color: imageType === type ? '#ffffff' : 'var(--text-secondary)',
                         border: `1px solid ${imageType === type ? 'var(--accent-blue)' : 'var(--border)'}`,
                         borderRadius: 4, cursor: 'pointer', transition: 'all 0.2s ease', textTransform: 'capitalize'
                       }}
@@ -217,36 +209,35 @@ export default function ControlPanel({
                   ))}
                 </div>
 
-                {/* --- NEW FLIP TOGGLES --- */}
-                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 8, fontFamily: "'Space Grotesk', sans-serif" }}>
-                  Flip Image (Optional):
+                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 8, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  flip image (optional):
                 </div>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button
                     onClick={() => setFlipHorizontal(!flipHorizontal)}
                     style={{
-                      flex: 1, padding: '6px 0', fontSize: 11, fontFamily: "'Space Grotesk', sans-serif",
-                      background: flipHorizontal ? 'var(--accent-blue)' : 'white',
-                      color: flipHorizontal ? 'white' : 'var(--text-secondary)',
+                      flex: 1, padding: '6px 0', fontSize: 11, fontFamily: "'Plus Jakarta Sans', sans-serif",
+                      background: flipHorizontal ? 'var(--accent-blue)' : 'var(--bg-primary)',
+                      color: flipHorizontal ? '#ffffff' : 'var(--text-secondary)',
                       border: `1px solid ${flipHorizontal ? 'var(--accent-blue)' : 'var(--border)'}`,
                       borderRadius: 4, cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4
                     }}
                   >
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="17 9 21 13 17 17" /><polyline points="7 9 3 13 7 17" /><line x1="21" y1="13" x2="3" y2="13" /></svg>
-                    Horizontal
+                    horizontal
                   </button>
                   <button
                     onClick={() => setFlipVertical(!flipVertical)}
                     style={{
-                      flex: 1, padding: '6px 0', fontSize: 11, fontFamily: "'Space Grotesk', sans-serif",
-                      background: flipVertical ? 'var(--accent-blue)' : 'white',
-                      color: flipVertical ? 'white' : 'var(--text-secondary)',
+                      flex: 1, padding: '6px 0', fontSize: 11, fontFamily: "'Plus Jakarta Sans', sans-serif",
+                      background: flipVertical ? 'var(--accent-blue)' : 'var(--bg-primary)',
+                      color: flipVertical ? '#ffffff' : 'var(--text-secondary)',
                       border: `1px solid ${flipVertical ? 'var(--accent-blue)' : 'var(--border)'}`,
                       borderRadius: 4, cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4
                     }}
                   >
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 17 13 21 17 17" /><polyline points="9 7 13 3 17 7" /><line x1="13" y1="21" x2="13" y2="3" /></svg>
-                    Vertical
+                    vertical
                   </button>
                 </div>
               </div>
@@ -255,18 +246,16 @@ export default function ControlPanel({
           )}
         </StepSection>
 
-        {/* ── STEP 3: RUN PIPELINE ── */}
         <StepSection
           num="03"
           title="run pipeline"
           active={stage === 'ready'}
           done={stage === 'preview' || stage === 'validated'}
         >
-          <p style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.6, margin: '0 0 10px', fontFamily: "'JetBrains Mono', monospace" }}>
-            CLAHE → SIFT → homography → warp → GeoTIFF
+          <p style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.6, margin: '0 0 10px', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            clahe → sift → homography → warp → geotiff
           </p>
 
-          {/* Pipeline params display */}
           <div className="card" style={{ padding: '8px 10px', marginBottom: 10 }}>
             {PIPELINE_CONFIG.map(([k, v]) => (
               <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '2px 0' }}>
@@ -308,19 +297,19 @@ function StepSection({
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
         <span style={{
-          fontFamily: "'JetBrains Mono', monospace",
+          fontFamily: "'Plus Jakarta Sans', sans-serif",
           fontSize: 10,
           fontWeight: 600,
-          color: done ? 'var(--accent-green)' : active ? 'var(--accent-blue)' : 'var(--text-muted)',
+          color: done ? 'var(--accent-cyan)' : active ? 'var(--accent-blue)' : 'var(--text-muted)',
           letterSpacing: '0.05em',
         }}>
           {done ? '✓' : num}
         </span>
         <span style={{
-          fontFamily: "'Space Grotesk', sans-serif",
+          fontFamily: "'Plus Jakarta Sans', sans-serif",
           fontSize: 12,
           fontWeight: 500,
-          color: done ? 'var(--accent-green)' : active ? 'var(--text-primary)' : 'var(--text-muted)',
+          color: done ? 'var(--accent-cyan)' : active ? 'var(--text-primary)' : 'var(--text-muted)',
           letterSpacing: '0.01em',
         }}>
           {title}

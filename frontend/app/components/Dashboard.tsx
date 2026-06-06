@@ -206,7 +206,6 @@ export default function Dashboard() {
         <PipelineViewer
           stepImages={stepImages}
           result={result}
-          viewport={viewport}
           onClose={() => setViewerOpen(false)}
         />
       )}
@@ -232,24 +231,24 @@ export default function Dashboard() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{
               width: 28, height: 28,
-              background: 'linear-gradient(135deg, #2b6cb0, #2c7a7b)',
+              background: 'linear-gradient(135deg, #3d6b5f, #5a8a7a)',
               borderRadius: 6,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="white" opacity="0.9" />
-                <circle cx="12" cy="9" r="2.5" fill="#2b6cb0" />
+                <circle cx="12" cy="9" r="2.5" fill="#3d6b5f" />
               </svg>
             </div>
             <span style={{
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontSize: 14,
               fontWeight: 600,
               color: 'var(--text-primary)',
               letterSpacing: '-0.01em',
             }}>GeoRef Studio</span>
             <span style={{
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontSize: 10,
               color: 'var(--text-muted)',
               letterSpacing: '0.1em',

@@ -92,19 +92,19 @@ function Crosshair({ captured }: { captured: boolean }) {
     <div style={{ position: 'relative', width: 0, height: 0 }}>
       <div style={{
         position: 'absolute', width: captured ? 80 : 64, height: captured ? 80 : 64,
-        border: `1.5px solid ${captured ? 'rgba(104,211,145,0.8)' : 'rgba(99,179,237,0.6)'}`,
+        border: `1.5px solid ${captured ? 'rgba(90,138,122,0.85)' : 'rgba(61,107,95,0.65)'}`,
         borderRadius: '50%', top: captured ? -40 : -32, left: captured ? -40 : -32,
         transition: 'all 0.3s ease',
       }} />
       <div style={{
         position: 'absolute', width: 6, height: 6, borderRadius: '50%',
-        background: captured ? '#68d391' : '#63b3ed', top: -3, left: -3,
-        boxShadow: `0 0 8px ${captured ? '#68d391' : '#63b3ed'}`,
+        background: captured ? '#3d6b5f' : '#5a8a7a', top: -3, left: -3,
+        boxShadow: `0 0 8px ${captured ? '#3d6b5f' : '#5a8a7a'}`,
       }} />
-      <div style={{ position: 'absolute', width: 20, height: 1, background: captured ? 'rgba(104,211,145,0.6)' : 'rgba(99,179,237,0.6)', top: 0, left: -25 }} />
-      <div style={{ position: 'absolute', width: 20, height: 1, background: captured ? 'rgba(104,211,145,0.6)' : 'rgba(99,179,237,0.6)', top: 0, left: 5 }} />
-      <div style={{ position: 'absolute', width: 1, height: 20, background: captured ? 'rgba(104,211,145,0.6)' : 'rgba(99,179,237,0.6)', top: -25, left: 0 }} />
-      <div style={{ position: 'absolute', width: 1, height: 20, background: captured ? 'rgba(104,211,145,0.6)' : 'rgba(99,179,237,0.6)', top: 5, left: 0 }} />
+      <div style={{ position: 'absolute', width: 20, height: 1, background: captured ? 'rgba(90,138,122,0.7)' : 'rgba(61,107,95,0.65)', top: 0, left: -25 }} />
+      <div style={{ position: 'absolute', width: 20, height: 1, background: captured ? 'rgba(90,138,122,0.7)' : 'rgba(61,107,95,0.65)', top: 0, left: 5 }} />
+      <div style={{ position: 'absolute', width: 1, height: 20, background: captured ? 'rgba(90,138,122,0.7)' : 'rgba(61,107,95,0.65)', top: -25, left: 0 }} />
+      <div style={{ position: 'absolute', width: 1, height: 20, background: captured ? 'rgba(90,138,122,0.7)' : 'rgba(61,107,95,0.65)', top: 5, left: 0 }} />
     </div>
   )
 }
@@ -119,7 +119,7 @@ function MapHUD({ stage, viewport }: { stage: AppStage; viewport: MapViewport })
         position: 'absolute', bottom: 28, left: 12, display: 'flex', gap: 8, alignItems: 'center', pointerEvents: 'none', zIndex: 10
       }}>
         <div className="card" style={{
-          padding: '5px 10px', fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: 'var(--text-secondary)', display: 'flex', gap: 12,
+          padding: '5px 10px', fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 10, color: 'var(--text-secondary)', display: 'flex', gap: 12,
         }}>
           <span>res: <span style={{ color: 'var(--accent-cyan)' }}>{metersPerPx.toFixed(2)} m/px</span></span>
           <span>cov: <span style={{ color: 'var(--accent-cyan)' }}>{(coverageM / 1000).toFixed(2)} km²</span></span>
@@ -129,7 +129,7 @@ function MapHUD({ stage, viewport }: { stage: AppStage; viewport: MapViewport })
       {stage === 'idle' && (
         <div style={{ position: 'absolute', top: 16, left: '50%', transform: 'translateX(-50%)', pointerEvents: 'none', zIndex: 10 }}>
           <div className="card" style={{
-            padding: '8px 16px', fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'var(--text-secondary)', textAlign: 'center',
+            padding: '8px 16px', fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 11, color: 'var(--text-secondary)', textAlign: 'center',
           }}>
             navigate to the area of your reference image
           </div>
@@ -140,7 +140,7 @@ function MapHUD({ stage, viewport }: { stage: AppStage; viewport: MapViewport })
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden', zIndex: 10 }}>
           <div style={{
             position: 'absolute', left: 0, right: 0, height: 2,
-            background: 'linear-gradient(90deg, transparent, rgba(99,179,237,0.6), transparent)',
+            background: 'linear-gradient(90deg, transparent, rgba(61,107,95,0.65), transparent)',
             animation: 'scan 2s ease-in-out infinite',
           }} />
         </div>
@@ -149,9 +149,9 @@ function MapHUD({ stage, viewport }: { stage: AppStage; viewport: MapViewport })
       {stage === 'validated' && (
         <div style={{ position: 'absolute', top: 16, right: 16, pointerEvents: 'none', zIndex: 10 }}>
           <div style={{
-            fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 600, letterSpacing: '0.15em',
-            color: '#68d391', border: '2px solid rgba(104,211,145,0.5)', borderRadius: 4, padding: '6px 14px',
-            background: 'rgba(104,211,145,0.08)', textTransform: 'uppercase',
+            fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: '0.15em',
+            color: '#3d6b5f', border: '2px solid rgba(90,138,122,0.55)', borderRadius: 4, padding: '6px 14px',
+            background: 'rgba(90,138,122,0.1)', textTransform: 'uppercase',
           }}>
             ✓ georeferenced
           </div>

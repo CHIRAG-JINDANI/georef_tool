@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useMap } from 'react-leaflet';
 
-// 1. Add this interface near the top, right under your imports:
 interface PhotonFeature {
     geometry: {
-        coordinates: [number, number]; // [lon, lat]
+        coordinates: [number, number];
     };
     properties: {
         name: string;
@@ -21,7 +20,6 @@ export default function MapSearchBox() {
     const [isSearching, setIsSearching] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
 
-    // Auto-search as you type with a 300ms delay (Debounce)
     useEffect(() => {
         if (!query.trim()) {
             setResults([]);
@@ -32,7 +30,6 @@ export default function MapSearchBox() {
         const delayDebounceFn = setTimeout(async () => {
             setIsSearching(true);
             try {
-                // Using Photon (Komoot) API for faster, typo-tolerant search
                 const response = await fetch(
                     `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=6`
                 );
@@ -40,7 +37,7 @@ export default function MapSearchBox() {
                 setResults(data.features || []);
                 setShowDropdown(true);
             } catch (error) {
-                console.error("Search failed", error);
+                console.error("search failed", error);
             } finally {
                 setIsSearching(false);
             }
@@ -56,11 +53,10 @@ export default function MapSearchBox() {
         setShowDropdown(false);
     };
 
-    // Format the display string nicely since Photon splits data into properties
     const formatAddress = (properties: PhotonFeature['properties']) => {
         const parts = [properties.name, properties.city, properties.state, properties.country];
         return parts.filter(Boolean).join(', ');
-    }; // <--- THIS WAS THE MISSING BRACE
+    };
 
     const stopPropagation = (e: React.MouseEvent | React.TouchEvent | React.WheelEvent | React.KeyboardEvent) => {
         e.stopPropagation();
@@ -86,29 +82,29 @@ export default function MapSearchBox() {
             onTouchStart={stopPropagation}
             onKeyDown={stopPropagation}
         >
-            {/* Search Bar */}
             <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                backgroundColor: 'white',
+                backgroundColor: 'var(--bg-card)',
                 borderRadius: 24,
-                boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.8)',
                 padding: '0 16px',
                 height: 48,
+                border: '1px solid var(--border)'
             }}>
                 <input
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search for a location..."
+                    placeholder="search for a location..."
                     style={{
                         flex: 1,
                         border: 'none',
                         outline: 'none',
                         fontSize: 15,
                         backgroundColor: 'transparent',
-                        color: '#333',
-                        fontFamily: "'Space Grotesk', sans-serif"
+                        color: 'var(--text-primary)',
+                        fontFamily: "'Plus Jakarta Sans', sans-serif"
                     }}
                 />
 
@@ -121,13 +117,13 @@ export default function MapSearchBox() {
                     {isSearching ? (
                         <div style={{
                             width: 20, height: 20,
-                            border: '2px solid #ccc',
+                            border: '2px solid var(--border)',
                             borderTopColor: 'transparent',
                             borderRadius: '50%',
                             animation: 'spin 1s linear infinite'
                         }} />
                     ) : (
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
@@ -135,20 +131,19 @@ export default function MapSearchBox() {
                 </div>
             </div>
 
-            {/* Results Dropdown */}
             {showDropdown && results.length > 0 && (
                 <div style={{
                     marginTop: 8,
-                    backgroundColor: 'white',
+                    backgroundColor: 'var(--bg-panel)',
                     borderRadius: 12,
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.8)',
                     overflow: 'hidden',
                     maxHeight: 280,
                     overflowY: 'auto',
+                    border: '1px solid var(--border)'
                 }}>
                     <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
                         {results.map((result: PhotonFeature, index: number) => {
-                            // Photon returns coordinates as [longitude, latitude]
                             const [lon, lat] = result.geometry.coordinates;
                             return (
                                 <li
@@ -156,19 +151,20 @@ export default function MapSearchBox() {
                                     onClick={() => handleSelectLocation(lon, lat)}
                                     style={{
                                         padding: '12px 16px',
-                                        borderBottom: '1px solid #f0f0f0',
+                                        borderBottom: '1px solid var(--border)',
                                         cursor: 'pointer',
                                         fontSize: 13,
-                                        color: '#444',
-                                        fontFamily: "'Space Grotesk', sans-serif",
-                                        lineHeight: 1.4
+                                        color: 'var(--text-primary)',
+                                        fontFamily: "'Plus Jakarta Sans', sans-serif",
+                                        lineHeight: 1.4,
+                                        transition: 'background-color 0.2s ease'
                                     }}
-                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
-                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-elevated)'}
+                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                                 >
                                     <strong>{result.properties.name}</strong>
                                     {result.properties.city || result.properties.state ? (
-                                        <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>
+                                        <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
                                             {formatAddress(result.properties).replace(`${result.properties.name}, `, '')}
                                         </div>
                                     ) : null}

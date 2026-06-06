@@ -52,7 +52,7 @@ export default function LogPanel({ logs, stepImages, onOpenViewer }: LogPanelPro
         >
           {hasSteps && (
             <span style={{
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontSize: 9,
               color: arrowHovered ? 'var(--accent-blue)' : 'var(--text-muted)',
               transition: 'color 0.15s ease',
