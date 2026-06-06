@@ -206,6 +206,7 @@ export default function Dashboard() {
         <PipelineViewer
           stepImages={stepImages}
           result={result}
+          viewport={viewport}
           onClose={() => setViewerOpen(false)}
         />
       )}

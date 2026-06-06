@@ -100,6 +100,29 @@ export default function PipelineViewer({ stepImages, result, onClose }: Pipeline
   const maxErr = result ? Math.max(...result.gcpData.map(g => g.residual)) : 0
   const minErr = result ? Math.min(...result.gcpData.map(g => g.residual)) : 0
 
+  // --- QGIS EXPORT LOGIC ---
+  const exportQgisPoints = () => {
+    if (!result?.gcpData) return
+
+    // QGIS format: mapX, mapY, pixelX, pixelY, enable
+    // Note: QGIS requires pixelY to be negative because its image origin is top-left
+    const header = "mapX,mapY,pixelX,pixelY,enable"
+    const lines = result.gcpData.map(g =>
+      `${g.dst[0].toFixed(8)},${g.dst[1].toFixed(8)},${g.src[0].toFixed(4)},-${g.src[1].toFixed(4)},1`
+    )
+    const content = [header, ...lines].join('\n')
+
+    const blob = new Blob([content], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'georef_qgis.points'
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'var(--bg-primary)', display: 'flex', flexDirection: 'column' }}>
 
@@ -219,8 +242,20 @@ export default function PipelineViewer({ stepImages, result, onClose }: Pipeline
 
               {/* Left Split: Raw Data Table */}
               <div style={{ width: '55%', display: 'flex', flexDirection: 'column', borderRight: '1px solid var(--border)', overflow: 'hidden' }}>
-                <div style={{ padding: '16px 20px', background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border)' }}>
+                <div style={{ padding: '16px 20px', background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 13, fontWeight: 600 }}>GCP Residual Data</span>
+
+                  <button
+                    onClick={exportQgisPoints}
+                    style={{
+                      background: 'transparent', border: '1px solid var(--accent-blue)', color: 'var(--accent-blue)',
+                      padding: '4px 10px', borderRadius: 4, cursor: 'pointer', fontFamily: "'JetBrains Mono', monospace", fontSize: 10, transition: 'background 0.15s ease'
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(99,179,237,0.1)' }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
+                  >
+                    export QGIS .points
+                  </button>
                 </div>
                 <div style={{ flex: 1, overflow: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontFamily: "'JetBrains Mono', monospace", fontSize: 11 }}>
