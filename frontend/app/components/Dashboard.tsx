@@ -23,6 +23,17 @@ export interface MapViewport {
   zoom: number
 }
 
+// --- NEW GCP DATA INTERFACE ---
+export interface GCPData {
+  id: number
+  src: [number, number]
+  dst: [number, number]
+  pred: [number, number]
+  dx: number
+  dy: number
+  residual: number
+}
+
 export interface ProcessingResult {
   stitchedUrl: string
   overlayBounds: {
@@ -34,6 +45,7 @@ export interface ProcessingResult {
   geotiffUrl: string
   inlierCount: number
   matchScore: number
+  gcpData: GCPData[] // <-- Passed from backend
 }
 
 export interface LogEntry {
@@ -52,7 +64,6 @@ export default function Dashboard() {
   const [logs, setLogs] = useState<LogEntry[]>([])
   const [imageType, setImageType] = useState<'sharp' | 'medium' | 'blurry' | null>(null)
 
-  // --- NEW FLIP STATES ---
   const [flipHorizontal, setFlipHorizontal] = useState(false)
   const [flipVertical, setFlipVertical] = useState(false)
 
@@ -117,8 +128,6 @@ export default function Dashboard() {
       formData.append('image_type', imageType)
       formData.append('map_width', '640')
       formData.append('map_height', '640')
-
-      // --- SEND FLIP PARAMS TO BACKEND ---
       formData.append('flip_h', String(flipHorizontal))
       formData.append('flip_v', String(flipVertical))
 
@@ -183,7 +192,7 @@ export default function Dashboard() {
     setResult(null)
     setStepImages({})
     setViewerOpen(false)
-    setFlipHorizontal(false) // Reset flips
+    setFlipHorizontal(false)
     setFlipVertical(false)
     setLogs([
       { type: 'dim', msg: 'session reset', ts: Date.now() },
@@ -196,6 +205,7 @@ export default function Dashboard() {
       {viewerOpen && (
         <PipelineViewer
           stepImages={stepImages}
+          result={result}
           onClose={() => setViewerOpen(false)}
         />
       )}

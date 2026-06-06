@@ -108,6 +108,33 @@ def get_matrix(proxy, ref, img_type):
     inliers = [good[i] for i in range(len(good)) if mask_list[i] == 1]
     score = min(1.0, len(inliers) / 30.0)
 
+    # --- NEW: CALCULATE RMSE DATA FOR FRONTEND GCP TABLE ---
+    gcp_list = []
+    inlier_idx = 0
+    for i in range(len(good)):
+        if mask_list[i] == 1:
+            match = good[i]
+            src_pt = kp_r[match.queryIdx].pt
+            dst_pt = kp_p[match.trainIdx].pt
+            
+            # Where the matrix actually places the source point
+            pred_pt = mat[:, :2] @ np.array(src_pt) + mat[:, 2]
+            
+            dx = pred_pt[0] - dst_pt[0]
+            dy = pred_pt[1] - dst_pt[1]
+            residual = float(np.sqrt(dx**2 + dy**2))
+            
+            gcp_list.append({
+                "id": inlier_idx,
+                "src": [float(src_pt[0]), float(src_pt[1])],
+                "dst": [float(dst_pt[0]), float(dst_pt[1])],
+                "pred": [float(pred_pt[0]), float(pred_pt[1])],
+                "dx": float(dx),
+                "dy": float(dy),
+                "residual": residual
+            })
+            inlier_idx += 1
+
     h1, w1 = ref_pp.shape[:2]
     h2, w2 = proxy_pp.shape[:2]
 
@@ -139,7 +166,7 @@ def get_matrix(proxy, ref, img_type):
     else:
         v3 = np.hstack((out1, out2))
 
-    return mat, inliers, score, v2, v3, good, mask_list, kp_p
+    return mat, inliers, score, v2, v3, gcp_list
 
 def make_tiff(img, n, s, e, w_coord):
     h, w = img.shape[:2]
@@ -180,12 +207,11 @@ async def process(
             if ref_img is None:
                 raise ValueError("decode failed")
 
-            # --- APPLY INCOMING IMAGE FLIPS ---
             if flip_h.lower() == "true":
-                ref_img = cv2.flip(ref_img, 1)  # 1 = Horizontal
+                ref_img = cv2.flip(ref_img, 1)
                 yield json.dumps({"type": "log", "msg": "applied horizontal image flip"}) + "\n"
             if flip_v.lower() == "true":
-                ref_img = cv2.flip(ref_img, 0)  # 0 = Vertical
+                ref_img = cv2.flip(ref_img, 0)
                 yield json.dumps({"type": "log", "msg": "applied vertical image flip"}) + "\n"
 
             proxy_b = None
@@ -218,7 +244,7 @@ async def process(
             yield json.dumps({"type": "step_img", "step": 1, "img": make_preview(v1)}) + "\n"
 
             yield json.dumps({"type": "log", "msg": "computing features"}) + "\n"
-            mat, inls, score, v2, v3, good, mask_list, kp_p = get_matrix(proxy_img, ref_img, image_type)
+            mat, inls, score, v2, v3, gcp_list = get_matrix(proxy_img, ref_img, image_type)
             yield json.dumps({"type": "step_img", "step": 2, "img": make_preview(v2)}) + "\n"
 
             yield json.dumps({"type": "log", "msg": "ransac consensus"}) + "\n"
@@ -287,12 +313,11 @@ async def process(
             merged_clean = cv2.add(bg, stitched_overlay)
 
             merged_visualized = merged_clean.copy()
+            
+            # Keep the green footprint outline
             cv2.polylines(merged_visualized, [np.int32(w_corn)], True, (0, 255, 0), 3, cv2.LINE_AA)
-            for i in range(len(good)):
-                if mask_list[i] == 1:
-                    match = good[i]
-                    pt = tuple(np.round(kp_p[match.trainIdx].pt).astype(int))
-                    cv2.circle(merged_visualized, pt, 5, (0, 0, 255), -1)
+            
+            # REMOVED: cv2.circle drawing logic. The frontend SVG will now handle drawing all red points.
 
             yield json.dumps({"type": "step_img", "step": 5, "img": make_preview(merged_visualized)}) + "\n"
 
@@ -319,7 +344,8 @@ async def process(
                 "geotiffUrl": f"data:application/octet-stream;base64,{tiff_b64}",
                 "overlayBounds": {"north": final_rn, "south": final_rs, "east": final_re, "west": final_rw},
                 "inlierCount": len(inls),
-                "matchScore": round(score, 4)
+                "matchScore": round(score, 4),
+                "gcpData": gcp_list # Pass GCP analysis to the frontend viewer
             }
             yield json.dumps({"type": "result", "data": result_data}) + "\n"
 
