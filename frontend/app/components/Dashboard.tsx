@@ -1,11 +1,31 @@
 'use client'
 
 import { useState, useCallback, useEffect } from 'react'
-import MapPanel from './MapPanel'
+import dynamic from 'next/dynamic'
 import ControlPanel from './ControlPanel'
 import LogPanel from './LogPanel'
 import ResultPanel from './ResultPanel'
 import PipelineViewer from './PipelineViewer'
+
+// Dynamically import MapPanel to prevent "window is not defined" error during Next.js build
+const MapPanel = dynamic(() => import('./MapPanel'), {
+  ssr: false,
+  loading: () => (
+    <div style={{
+      width: '100%',
+      height: '100%',
+      background: 'var(--bg-panel)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: 'var(--text-muted)',
+      fontFamily: "'Plus Jakarta Sans', sans-serif",
+      fontSize: 12
+    }}>
+      initializing spatial canvas...
+    </div>
+  )
+})
 
 export type AppStage =
   | 'idle'
@@ -23,7 +43,6 @@ export interface MapViewport {
   zoom: number
 }
 
-// --- NEW GCP DATA INTERFACE ---
 export interface GCPData {
   id: number
   src: [number, number]
@@ -45,7 +64,7 @@ export interface ProcessingResult {
   geotiffUrl: string
   inlierCount: number
   matchScore: number
-  gcpData: GCPData[] // <-- Passed from backend
+  gcpData: GCPData[]
 }
 
 export interface LogEntry {
@@ -131,7 +150,10 @@ export default function Dashboard() {
       formData.append('flip_h', String(flipHorizontal))
       formData.append('flip_v', String(flipVertical))
 
-      const resp = await fetch('/api/py/process', {
+      // Reads target environment URL set in Vercel settings, drops back to local fallback if offline
+      const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
+      const resp = await fetch(`${baseURL}/process`, {
         method: 'POST',
         body: formData,
       })

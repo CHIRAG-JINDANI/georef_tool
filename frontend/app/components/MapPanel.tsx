@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, ImageOverlay, useMapEvents } from 'react-leaflet'
-import MapSearchBox from './MapSearchBox' // <--- ADDED IMPORT
+import MapSearchBox from './MapSearchBox'
 import type { AppStage, MapViewport, ProcessingResult } from './Dashboard'
 
 interface MapPanelProps {
@@ -12,7 +12,6 @@ interface MapPanelProps {
   onViewportChange: (vp: MapViewport) => void
 }
 
-// Helper component to bind Leaflet map events to React state
 function MapEvents({ onViewportChange }: { onViewportChange: (vp: MapViewport) => void }) {
   useMapEvents({
     moveend: (e) => {
@@ -45,18 +44,14 @@ export default function MapPanel({ stage, viewport, result, onViewportChange }: 
         wheelPxPerZoomLevel={20}
         scrollWheelZoom={true}
       >
-        {/* Esri World Imagery */}
         <TileLayer
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
           attribution="&copy; Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EAP, and the GIS User Community"
         />
 
         <MapEvents onViewportChange={onViewportChange} />
-
-        {/* THE SEARCH BOX - Now mounted inside the map! */}
         <MapSearchBox />
 
-        {/* Result overlay */}
         {result && (stage === 'preview' || stage === 'validated') && (
           <ImageOverlay
             url={result.stitchedUrl}
@@ -68,7 +63,6 @@ export default function MapPanel({ stage, viewport, result, onViewportChange }: 
         )}
       </MapContainer>
 
-      {/* Fixed Center Crosshair overlay */}
       {(stage === 'navigating' || stage === 'captured' || stage === 'ready') && (
         <div style={{
           position: 'absolute',
@@ -81,7 +75,6 @@ export default function MapPanel({ stage, viewport, result, onViewportChange }: 
         </div>
       )}
 
-      {/* Map UI overlays */}
       <MapHUD stage={stage} viewport={viewport} />
     </div>
   )
