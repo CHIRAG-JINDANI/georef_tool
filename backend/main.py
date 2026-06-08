@@ -21,6 +21,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+@app.get("/")
+def home():
+    return {"status": "georef-tool predictive engine is active"}
 
 def get_mpp(lat, zoom):
     return 156543.03392 * math.cos(math.radians(lat)) / (2 ** zoom)
