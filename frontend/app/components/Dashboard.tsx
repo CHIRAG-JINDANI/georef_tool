@@ -111,14 +111,18 @@ export default function Dashboard() {
     const dLat = (320 * mpp) / 111320
     const dLng = (320 * mpp) / (111320 * Math.cos(viewport.lat * Math.PI / 180))
     const bbox = `${viewport.lng - dLng},${viewport.lat - dLat},${viewport.lng + dLng},${viewport.lat + dLat}`
+
+    // --- CHANGED: Now properly interpolating ${layerMap} into the URL so it actually requests the correct map ---
     const layerMap = mapMode === 'terrain' ? 'World_Shaded_Relief' : 'World_Imagery';
-    const staticUrl = `https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/export?bbox=${bbox}&bboxSR=4326&size=640,640&format=jpg&f=image`
+    const staticUrl = `https://services.arcgisonline.com/arcgis/rest/services/${layerMap}/MapServer/export?bbox=${bbox}&bboxSR=4326&size=640,640&format=jpg&f=image`
 
     setCapturedProxy(staticUrl)
     setStage('captured')
-    addLog('ok', `proxy image locked — 640×640px satellite`)
+
+    // --- CHANGED: Updated the log message to reflect the actual mode instead of hardcoding 'satellite' ---
+    addLog('ok', `proxy image locked — 640×640px ${mapMode}`)
     addLog('dim', `pixel resolution: ${mpp.toFixed(3)} m/px`)
-  }, [viewport, addLog])
+  }, [viewport, mapMode, addLog])
 
   const handleReferenceUpload = useCallback((file: File) => {
     setStage('uploading')
