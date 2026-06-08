@@ -1,7 +1,0 @@
-fastapi
-uvicorn[standard]
-python-multipart
-httpx
-numpy
-opencv-python-headless
-rasterio
