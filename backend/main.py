@@ -17,7 +17,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "https://georef-tool.app"],
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "https://georef-tool.vercel.app/"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
