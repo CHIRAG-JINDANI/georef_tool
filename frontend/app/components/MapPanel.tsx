@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { MapContainer, TileLayer, ImageOverlay, useMapEvents } from 'react-leaflet'
+import { MapContainer, TileLayer, ImageOverlay, useMapEvents, LayersControl } from 'react-leaflet'
 import MapSearchBox from './MapSearchBox'
 import type { AppStage, MapViewport, ProcessingResult } from './Dashboard'
 
@@ -44,10 +44,21 @@ export default function MapPanel({ stage, viewport, result, onViewportChange }: 
         wheelPxPerZoomLevel={20}
         scrollWheelZoom={true}
       >
-        <TileLayer
-          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-          attribution="&copy; Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EAP, and the GIS User Community"
-        />
+        <LayersControl position="topright">
+          <LayersControl.BaseLayer checked name="Satellite View">
+            <TileLayer
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+              attribution="&copy; Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EAP, and the GIS User Community"
+            />
+          </LayersControl.BaseLayer>
+
+          <LayersControl.BaseLayer name="Terrain View">
+            <TileLayer
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}"
+              attribution="&copy; Esri, USGS, NOAA"
+            />
+          </LayersControl.BaseLayer>
+        </LayersControl>
 
         <MapEvents onViewportChange={onViewportChange} />
         <MapSearchBox />
