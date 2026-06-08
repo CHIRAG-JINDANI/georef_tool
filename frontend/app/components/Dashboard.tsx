@@ -82,7 +82,7 @@ export default function Dashboard() {
   const [result, setResult] = useState<ProcessingResult | null>(null)
   const [logs, setLogs] = useState<LogEntry[]>([])
   const [imageType, setImageType] = useState<'sharp' | 'medium' | 'blurry' | null>(null)
-
+  const [mapMode, setMapMode] = useState<'satellite' | 'terrain'>('satellite')
   const [flipHorizontal, setFlipHorizontal] = useState(false)
   const [flipVertical, setFlipVertical] = useState(false)
 
@@ -111,6 +111,7 @@ export default function Dashboard() {
     const dLat = (320 * mpp) / 111320
     const dLng = (320 * mpp) / (111320 * Math.cos(viewport.lat * Math.PI / 180))
     const bbox = `${viewport.lng - dLng},${viewport.lat - dLat},${viewport.lng + dLng},${viewport.lat + dLat}`
+    const layerMap = mapMode === 'terrain' ? 'World_Shaded_Relief' : 'World_Imagery';
     const staticUrl = `https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/export?bbox=${bbox}&bboxSR=4326&size=640,640&format=jpg&f=image`
 
     setCapturedProxy(staticUrl)
@@ -319,6 +320,7 @@ export default function Dashboard() {
             viewport={viewport}
             result={result}
             onViewportChange={handleViewportChange}
+            setMapMode={setMapMode}
           />
         </main>
 

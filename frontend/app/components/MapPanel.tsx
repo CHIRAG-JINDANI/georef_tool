@@ -10,9 +10,16 @@ interface MapPanelProps {
   viewport: MapViewport
   result: ProcessingResult | null
   onViewportChange: (vp: MapViewport) => void
+  setMapMode: (mode: 'satellite' | 'terrain') => void
 }
 
-function MapEvents({ onViewportChange }: { onViewportChange: (vp: MapViewport) => void }) {
+function MapEvents({
+  onViewportChange,
+  setMapMode
+}: {
+  onViewportChange: (vp: MapViewport) => void
+  setMapMode: (mode: 'satellite' | 'terrain') => void
+}) {
   useMapEvents({
     moveend: (e) => {
       const map = e.target
@@ -22,12 +29,19 @@ function MapEvents({ onViewportChange }: { onViewportChange: (vp: MapViewport) =
         lng: center.lng,
         zoom: map.getZoom(),
       })
+    },
+    baselayerchange: (e) => {
+      if (e.name === 'Terrain View') {
+        setMapMode('terrain')
+      } else {
+        setMapMode('satellite')
+      }
     }
   })
   return null
 }
 
-export default function MapPanel({ stage, viewport, result, onViewportChange }: MapPanelProps) {
+export default function MapPanel({ stage, viewport, result, onViewportChange, setMapMode }: MapPanelProps) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
   if (!mounted) return null
@@ -60,7 +74,7 @@ export default function MapPanel({ stage, viewport, result, onViewportChange }: 
           </LayersControl.BaseLayer>
         </LayersControl>
 
-        <MapEvents onViewportChange={onViewportChange} />
+        <MapEvents onViewportChange={onViewportChange} setMapMode={setMapMode} />
         <MapSearchBox />
 
         {result && (stage === 'preview' || stage === 'validated') && (
