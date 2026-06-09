@@ -73,7 +73,12 @@ export interface LogEntry {
   ts: number
 }
 
-export default function Dashboard() {
+// ─── Only addition: accept onSwitchToChangeDet prop ───────────────────────────
+interface DashboardProps {
+  onSwitchToChangeDet: () => void
+}
+
+export default function Dashboard({ onSwitchToChangeDet }: DashboardProps) {
   const [stage, setStage] = useState<AppStage>('idle')
   const [viewport, setViewport] = useState<MapViewport>({ lat: 28.6139, lng: 77.209, zoom: 14 })
   const [capturedProxy, setCapturedProxy] = useState<string | null>(null)
@@ -88,6 +93,9 @@ export default function Dashboard() {
 
   const [stepImages, setStepImages] = useState<Record<number, string>>({})
   const [viewerOpen, setViewerOpen] = useState(false)
+
+  // ─── New: dropdown state ───────────────────────────────────────────────────
+  const [dropdownOpen, setDropdownOpen] = useState(false)
 
   useEffect(() => {
     setLogs([
@@ -237,14 +245,17 @@ export default function Dashboard() {
         />
       )}
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '320px 1fr 280px',
-        gridTemplateRows: '48px 1fr',
-        height: '100vh',
-        background: 'var(--bg-primary)',
-        gap: 0,
-      }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '320px 1fr 280px',
+          gridTemplateRows: '48px 1fr',
+          height: '100vh',
+          background: 'var(--bg-primary)',
+          gap: 0,
+        }}
+        onClick={() => dropdownOpen && setDropdownOpen(false)}
+      >
         <header style={{
           gridColumn: '1 / -1',
           display: 'flex',
@@ -253,35 +264,79 @@ export default function Dashboard() {
           padding: '0 20px',
           background: 'var(--bg-secondary)',
           borderBottom: '1px solid var(--border)',
-          zIndex: 10,
+          zIndex: 50,
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {/* ─── Left: logo + dropdown ─── */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 0, position: 'relative' }}>
+            {/* Icon */}
             <div style={{
               width: 28, height: 28,
               background: 'linear-gradient(135deg, #3d6b5f, #5a8a7a)',
               borderRadius: 6,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
             }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="white" opacity="0.9" />
                 <circle cx="12" cy="9" r="2.5" fill="#3d6b5f" />
               </svg>
             </div>
-            <span style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontSize: 14,
-              fontWeight: 600,
-              color: 'var(--text-primary)',
-              letterSpacing: '-0.01em',
-            }}>GeoRef Studio</span>
-            <span style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontSize: 10,
-              color: 'var(--text-muted)',
-              letterSpacing: '0.1em',
-            }}>v1.0</span>
+
+            {/* Dropdown trigger button */}
+            <button
+              onClick={e => { e.stopPropagation(); setDropdownOpen(o => !o) }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                background: 'transparent', border: 'none', cursor: 'pointer',
+                padding: '0 10px', height: 48,
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
+              }}
+            >
+              <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>GeoRef Studio</span>
+              <span style={{ fontSize: 10, color: 'var(--text-muted)', letterSpacing: '0.1em' }}>v1.0</span>
+              <svg
+                width="12" height="12" viewBox="0 0 24 24" fill="none"
+                stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                style={{ transform: dropdownOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease', marginLeft: 2 }}
+              >
+                <polyline points="6,9 12,15 18,9" />
+              </svg>
+            </button>
+
+            {/* Dropdown menu */}
+            {dropdownOpen && (
+              <div
+                onClick={e => e.stopPropagation()}
+                style={{
+                  position: 'absolute', top: 44, left: 0,
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 8,
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.6)',
+                  overflow: 'hidden',
+                  minWidth: 200,
+                  zIndex: 100,
+                }}
+              >
+                <div style={{ padding: '6px 0' }}>
+                  <DropdownItem
+                    label="GeoRef Studio"
+                    sub="automatic georeferencing"
+                    active={true}
+                    onClick={() => setDropdownOpen(false)}
+                  />
+                  <DropdownItem
+                    label="Change Detection"
+                    sub="temporal raster diff"
+                    active={false}
+                    onClick={() => { setDropdownOpen(false); onSwitchToChangeDet() }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
+          {/* ─── Right: stage badge + coords + reset (unchanged) ─── */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
             <StageIndicator stage={stage} />
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -352,6 +407,33 @@ export default function Dashboard() {
   )
 }
 
+// ─── DropdownItem (new helper) ─────────────────────────────────────────────────
+function DropdownItem({ label, sub, active, onClick }: { label: string; sub: string; active: boolean; onClick: () => void }) {
+  const [hovered, setHovered] = useState(false)
+  return (
+    <div
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        padding: '10px 16px',
+        cursor: 'pointer',
+        background: active ? 'rgba(168, 85, 247, 0.15)' : hovered ? 'rgba(255,255,255,0.04)' : 'transparent',
+        borderLeft: active ? '2px solid var(--accent-blue)' : '2px solid transparent',
+        transition: 'all 0.15s ease',
+      }}
+    >
+      <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 13, fontWeight: active ? 600 : 400, color: active ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+        {label}
+      </div>
+      <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>
+        {sub}
+      </div>
+    </div>
+  )
+}
+
+// ─── StageIndicator (unchanged) ───────────────────────────────────────────────
 function StageIndicator({ stage }: { stage: AppStage }) {
   const config: Record<AppStage, { label: string; cls: string }> = {
     idle: { label: 'idle', cls: 'badge-idle' },
@@ -377,6 +459,7 @@ function StageIndicator({ stage }: { stage: AppStage }) {
   )
 }
 
+// ─── CoordDisplay (unchanged) ─────────────────────────────────────────────────
 function CoordDisplay({ viewport }: { viewport: MapViewport }) {
   return (
     <span className="coord-pill">

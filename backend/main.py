@@ -15,6 +15,11 @@ import asyncio
 
 app = FastAPI()
 
+# ── Change Detection mini-project (separate router, separate file) ────────────
+from change_detection_api import router as cd_router
+app.include_router(cd_router)
+# ─────────────────────────────────────────────────────────────────────────────
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "https://georef-tool.vercel.app"],
