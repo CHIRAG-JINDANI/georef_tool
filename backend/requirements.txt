@@ -5,3 +5,4 @@ httpx
 numpy
 opencv-python-headless
 rasterio
+scikit-image
