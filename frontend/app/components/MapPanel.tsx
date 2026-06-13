@@ -53,10 +53,10 @@ export default function MapPanel({ stage, viewport, result, onViewportChange, se
         zoom={viewport.zoom}
         style={{ width: '100%', height: '100%', zIndex: 0 }}
         zoomControl={false}
-        zoomSnap={0.001}
-        zoomDelta={0.001}
-        wheelPxPerZoomLevel={20}
-        scrollWheelZoom={true}
+        zoomSnap={1}
+        zoomDelta={1}
+        wheelPxPerZoomLevel={60}
+        scrollWheelZoom="center"
       >
         <LayersControl position="topright">
           <LayersControl.BaseLayer checked name="Satellite View">
@@ -88,20 +88,22 @@ export default function MapPanel({ stage, viewport, result, onViewportChange, se
         )}
       </MapContainer>
 
-      {(stage === 'navigating' || stage === 'captured' || stage === 'ready') && (
-        <div style={{
-          position: 'absolute',
-          top: '50%', left: '50%',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 10,
-          pointerEvents: 'none'
-        }}>
-          <Crosshair captured={stage === 'captured' || stage === 'ready'} />
-        </div>
-      )}
+      {
+        (stage === 'navigating' || stage === 'captured' || stage === 'ready') && (
+          <div style={{
+            position: 'absolute',
+            top: '50%', left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 10,
+            pointerEvents: 'none'
+          }}>
+            <Crosshair captured={stage === 'captured' || stage === 'ready'} />
+          </div>
+        )
+      }
 
       <MapHUD stage={stage} viewport={viewport} />
-    </div>
+    </div >
   )
 }
 
