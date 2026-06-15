@@ -1,0 +1,51 @@
+<mxfile host="app.diagrams.net" modified="2026-06-15T12:30:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+  <diagram id="core_infra" name="Core Implementation Infrastructure">
+    <mxGraphModel dx="1000" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="920" pageHeight="600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="container" value="Core Implementation Infrastructure" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8f9fa;strokeColor=#333333;strokeWidth=2;startSize=40;fontStyle=1;fontSize=14;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="840" height="460" as="geometry" />
+        </mxCell>
+
+        <mxCell id="box1" value="&lt;p style=&quot;margin:0px;font-size:14px;color:#000000;&quot;&gt;&lt;b&gt;Sect 6.1 — OS &amp;amp; Runtime Environments&lt;/b&gt;&lt;br&gt;Ubuntu 22.04 LTS &amp;middot; Python 3.11 &amp;middot; Node.js 18 LTS&lt;/p&gt;&lt;p style=&quot;margin:4px 0px 0px 0px;font-size:12px;color:#444444;&quot;&gt;Sets virtual execution envelopes, controls path variables, allocates processing threads.&lt;/p&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=20;spacingRight=20;verticalAlign=middle;" vertex="1" parent="container">
+          <mxGeometry x="40" y="70" width="760" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="box2" value="&lt;p style=&quot;margin:0px;font-size:14px;color:#000000;&quot;&gt;&lt;b&gt;Sect 6.2 — Tools &amp;amp; Libraries Specifications&lt;/b&gt;&lt;br&gt;Headless OpenCV 4.x &amp;middot; Math Core &amp;middot; SciPy &amp;middot; GDAL&lt;/p&gt;&lt;p style=&quot;margin:4px 0px 0px 0px;font-size:12px;color:#444444;&quot;&gt;Pins exact stable framework version locks inside strict package manifests across blocks.&lt;/p&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=20;spacingRight=20;verticalAlign=middle;" vertex="1" parent="container">
+          <mxGeometry x="40" y="210" width="760" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="box3" value="&lt;p style=&quot;margin:0px;font-size:14px;color:#000000;&quot;&gt;&lt;b&gt;Sect 6.3 — Code Governance Standards&lt;/b&gt;&lt;br&gt;TypeScript Strict Typing &amp;middot; PEP 8 Snake-Case Structs&lt;/p&gt;&lt;p style=&quot;margin:4px 0px 0px 0px;font-size:12px;color:#444444;&quot;&gt;Enforces non-blocking async thread pools and line-by-line chunk stream readers.&lt;/p&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=20;spacingRight=20;verticalAlign=middle;" vertex="1" parent="container">
+          <mxGeometry x="40" y="350" width="760" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=block;endFill=1;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="container" source="box1" target="box2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="label1" value="Managed Deployment Dependency Configurations" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=#333333;labelBackgroundColor=#f8f9fa;" vertex="1" connectable="0" parent="arrow1">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=block;endFill=1;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="container" source="box2" target="box3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="label2" value="Static Code Enforcement Checkers" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=#333333;labelBackgroundColor=#f8f9fa;" vertex="1" connectable="0" parent="arrow2">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="fig_label" value="&lt;b&gt;Figure 4:&lt;/b&gt; Core Implementation Infrastructure and Environment Stack." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="160" y="520" width="600" height="30" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,56 @@
+<mxfile host="app.diagrams.net" modified="2026-06-15T12:45:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+  <diagram id="testing_tiers" name="Testing Tiers Logic">
+    <mxGraphModel dx="1000" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="920" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="container" value="Comprehensive Testing Tiers Logic" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8f9fa;strokeColor=#333333;strokeWidth=2;startSize=40;fontStyle=1;fontSize=14;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="840" height="540" as="geometry" />
+        </mxCell>
+
+        <mxCell id="layer4" value="&lt;p style=&quot;margin:0px;font-size:14px;color:#000000;&quot;&gt;&lt;b&gt;Layer 4 — UAT Level&lt;/b&gt;&lt;br&gt;Evaluates workflow logic &amp;amp; layout clarity using non-expert operators.&lt;/p&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;spacingLeft=20;spacingRight=20;verticalAlign=middle;" vertex="1" parent="container">
+          <mxGeometry x="40" y="70" width="760" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="layer3" value="&lt;p style=&quot;margin:0px;font-size:14px;color:#000000;&quot;&gt;&lt;b&gt;Layer 3 — System Scenario Level&lt;/b&gt;&lt;br&gt;Processes real-world geographic files against production GIS benchmarks.&lt;/p&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=20;spacingRight=20;verticalAlign=middle;" vertex="1" parent="container">
+          <mxGeometry x="40" y="190" width="760" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="layer2" value="&lt;p style=&quot;margin:0px;font-size:14px;color:#000000;&quot;&gt;&lt;b&gt;Layer 2 — Network Integration Tier&lt;/b&gt;&lt;br&gt;Validates streaming data contracts and Next reverse-proxy rewriters.&lt;/p&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=20;spacingRight=20;verticalAlign=middle;" vertex="1" parent="container">
+          <mxGeometry x="40" y="310" width="760" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="layer1" value="&lt;p style=&quot;margin:0px;font-size:14px;color:#000000;&quot;&gt;&lt;b&gt;Layer 1 — Isolated Unit Testing&lt;/b&gt;&lt;br&gt;Verifies discrete mathematical functions inside processing libraries.&lt;/p&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=20;spacingRight=20;verticalAlign=middle;" vertex="1" parent="container">
+          <mxGeometry x="40" y="430" width="760" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arrow3_4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;endArrow=block;endFill=1;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="container" source="layer3" target="layer4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label3_4" value="&lt;span style=&quot;background-color:#f8f9fa;&quot;&gt;Successful Workflow Verification&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=#333333;" vertex="1" connectable="0" parent="arrow3_4">
+          <mxGeometry x="0" y="0" relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arrow2_3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;endArrow=block;endFill=1;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="container" source="layer2" target="layer3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label2_3" value="&lt;span style=&quot;background-color:#f8f9fa;&quot;&gt;Full Vertical Integration Passing&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=#333333;" vertex="1" connectable="0" parent="arrow2_3">
+          <mxGeometry x="0" y="0" relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arrow1_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;endArrow=block;endFill=1;strokeColor=#333333;strokeWidth=1.5;" edge="1" parent="container" source="layer1" target="layer2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label1_2" value="&lt;span style=&quot;background-color:#f8f9fa;&quot;&gt;Interface Schema Compliance Secured&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=#333333;" vertex="1" connectable="0" parent="arrow1_2">
+          <mxGeometry x="0" y="0" relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="fig_label" value="&lt;b&gt;Figure 5:&lt;/b&gt; Comprehensive Testing Tiers Logic and Verification Pipeline." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="160" y="600" width="600" height="30" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,27 @@
+#for mermaid.Js
+
+flowchart LR
+    Actor((GIS Analyst /<br>Technician))
+
+    subgraph GeoRef_Studio [GeoRef Studio System Boundary]
+        direction TB
+        UC01([UC-01: Navigate Satellite Map])
+        UC02([UC-02: Search Text Coordinates])
+        UC03([UC-03: Intercept Satellite Proxy])
+        UC04([UC-04: Upload Raster Data Asset])
+        UC05([UC-05: Run Automation Pipeline])
+        UC06([UC-06: Monitor Real-time Logs])
+        UC07([UC-07: Open Step Pipeline Inspector])
+        UC08([UC-08: Validate Map Spatial Errors])
+        UC09([UC-09: Export Completed GeoTIFF])
+    end
+
+    Actor --> UC01
+    Actor --> UC02
+    Actor --> UC03
+    Actor --> UC04
+    Actor --> UC05
+    Actor --> UC06
+    Actor --> UC07
+    Actor --> UC08
+    Actor --> UC09

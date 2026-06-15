@@ -1,0 +1,12 @@
+flowchart TD
+    Start((Start)) --> Decode{Decode Payload?}
+    Decode -- Error --> Abort(((Abort)))
+    Decode -- OK --> Fetch{Fetch Tile w/ Retry?}
+    
+    Fetch -- Timeout --> Abort
+    Fetch -- OK --> Match{RANSAC Inliers >= 4?}
+    
+    Match -- No --> Abort
+    Match -- Yes --> Export[Warp, Encode GeoTIFF & Deliver JSON]
+    
+    Export --> Done(((Success)))

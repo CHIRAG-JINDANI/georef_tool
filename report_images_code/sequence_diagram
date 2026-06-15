@@ -1,0 +1,21 @@
+sequenceDiagram
+    autonumber
+    actor User
+    participant Frontend as Dashboard Component
+    participant Backend as FastAPI Server
+    participant External as Remote ESRI Servers
+
+    User->>Frontend: Triggers automated pipeline
+    Frontend->>Backend: HTTP POST /process (Multipart Payload)
+    
+    activate Backend
+    Backend->>External: Async fetch satellite reference tile
+    External-->>Backend: Returns contemporary tile
+    
+    Note right of Backend: Backend executes CLAHE, SIFT/FLANN, RANSAC, & Matrix Warping
+    
+    Backend-->>Frontend: Streams real-time NDJSON progress & stage previews
+    Backend-->>Frontend: Delivers final JSON result payload (GeoTIFF)
+    deactivate Backend
+
+    Frontend->>User: Renders aligned geographic map overlay

@@ -1,0 +1,149 @@
+#for draw.io
+#Level 1 Geoprocessing Data Pathway and Pipeline Architecture
+<mxfile host="app.diagrams.net" modified="2026-06-15T06:15:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+    <diagram id="geoprocess_pipe" name="Geoprocess Pipeline">
+        <mxGraphModel dx="1000" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1"
+            page="1" pageScale="1" pageWidth="920" pageHeight="600" math="0" shadow="0">
+            <root>
+                <mxCell id="0" />
+                <mxCell id="1" parent="0" />
+
+                <mxCell id="frame" value=""
+                    style="whiteSpace=wrap;html=1;fillColor=none;strokeColor=#333333;strokeWidth=2;" vertex="1"
+                    parent="1">
+                    <mxGeometry x="40" y="40" width="840" height="480" as="geometry" />
+                </mxCell>
+
+                <mxCell id="title" value="LEVEL 1 GEOPROCESS DATA PATHWAY SCHEMATICS"
+                    style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#333333;fontStyle=1;fontSize=16;"
+                    vertex="1" parent="1">
+                    <mxGeometry x="40" y="40" width="840" height="40" as="geometry" />
+                </mxCell>
+
+                <mxCell id="raw_file" value="[Raw Upload File]"
+                    style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1"
+                    parent="1">
+                    <mxGeometry x="80" y="140" width="140" height="40" as="geometry" />
+                </mxCell>
+                <mxCell id="p2" value="P2: Preprocess Arrays"
+                    style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="300" y="140" width="140" height="40" as="geometry" />
+                </mxCell>
+                <mxCell id="balanced_m" value="[Balanced Matrices]"
+                    style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1"
+                    parent="1">
+                    <mxGeometry x="520" y="140" width="140" height="40" as="geometry" />
+                </mxCell>
+                <mxCell id="p3" value="P3: Grid SIFT Engine"
+                    style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="740" y="140" width="140" height="40" as="geometry" />
+                </mxCell>
+                <mxCell id="modern_tile" value="[Modern Tile JPEG]"
+                    style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1"
+                    parent="1">
+                    <mxGeometry x="80" y="260" width="140" height="40" as="geometry" />
+                </mxCell>
+                <mxCell id="p1" value="P1: Fetch Proxy Tile"
+                    style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="300" y="260" width="140" height="40" as="geometry" />
+                </mxCell>
+                <mxCell id="ref_m" value="[Reference Matrix]"
+                    style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1"
+                    parent="1">
+                    <mxGeometry x="520" y="260" width="140" height="40" as="geometry" />
+                </mxCell>
+                <mxCell id="sift_arr" value="[SIFT Descriptor Arrays]"
+                    style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1"
+                    parent="1">
+                    <mxGeometry x="740" y="260" width="140" height="60" as="geometry" />
+                </mxCell>
+                <mxCell id="warped" value="[Warped GeoTIFF]"
+                    style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1"
+                    parent="1">
+                    <mxGeometry x="80" y="400" width="140" height="40" as="geometry" />
+                </mxCell>
+                <mxCell id="p5" value="P5: Geospatial Export"
+                    style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="300" y="400" width="140" height="40" as="geometry" />
+                </mxCell>
+                <mxCell id="stable_inlier" value="[Stable Inlier Lists]"
+                    style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1"
+                    parent="1">
+                    <mxGeometry x="520" y="400" width="140" height="40" as="geometry" />
+                </mxCell>
+                <mxCell id="p4" value="P4: RANSAC Filter Loops"
+                    style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="740" y="400" width="140" height="40" as="geometry" />
+                </mxCell>
+                <mxCell id="p6" value="P6: Stream Packager"
+                    style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="80" y="480" width="140" height="40" as="geometry" />
+                </mxCell>
+                <mxCell id="json_str" value="[Newline Delimited JSON Strings]"
+                    style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1"
+                    parent="1">
+                    <mxGeometry x="300" y="480" width="220" height="40" as="geometry" />
+                </mxCell>
+                <mxCell id="workspace" value="[User Workspace Console]"
+                    style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1"
+                    parent="1">
+                    <mxGeometry x="600" y="480" width="180" height="40" as="geometry" />
+                </mxCell>
+
+                <mxCell id="e1" edge="1" parent="1" source="raw_file" target="p2">
+                    <mxGeometry relative="1" as="geometry" />
+                </mxCell>
+                <mxCell id="e2" edge="1" parent="1" source="p2" target="balanced_m">
+                    <mxGeometry relative="1" as="geometry" />
+                </mxCell>
+                <mxCell id="e3" edge="1" parent="1" source="balanced_m" target="p3">
+                    <mxGeometry relative="1" as="geometry" />
+                </mxCell>
+                <mxCell id="e4" edge="1" parent="1" source="p3" target="sift_arr">
+                    <mxGeometry relative="1" as="geometry" />
+                </mxCell>
+                <mxCell id="e5" edge="1" parent="1" source="sift_arr" target="p3">
+                    <mxGeometry relative="1" as="geometry" />
+                </mxCell>
+                <mxCell id="e6" edge="1" parent="1" source="modern_tile" target="p1">
+                    <mxGeometry relative="1" as="geometry" />
+                </mxCell>
+                <mxCell id="e7" edge="1" parent="1" source="p1" target="ref_m">
+                    <mxGeometry relative="1" as="geometry" />
+                </mxCell>
+                <mxCell id="e8" edge="1" parent="1" source="sift_arr" target="p4">
+                    <mxGeometry relative="1" as="geometry" />
+                </mxCell>
+                <mxCell id="e9" edge="1" parent="1" source="p4" target="stable_inlier">
+                    <mxGeometry relative="1" as="geometry" />
+                </mxCell>
+                <mxCell id="e10" edge="1" parent="1" source="stable_inlier" target="p5">
+                    <mxGeometry relative="1" as="geometry" />
+                </mxCell>
+                <mxCell id="e11" edge="1" parent="1" source="p5" target="warped">
+                    <mxGeometry relative="1" as="geometry" />
+                </mxCell>
+                <mxCell id="e12" edge="1" parent="1" source="warped" target="p6">
+                    <mxGeometry relative="1" as="geometry" />
+                </mxCell>
+                <mxCell id="e13" edge="1" parent="1" source="p6" target="json_str">
+                    <mxGeometry relative="1" as="geometry" />
+                </mxCell>
+                <mxCell id="e14" edge="1" parent="1" source="json_str" target="workspace">
+                    <mxGeometry relative="1" as="geometry" />
+                </mxCell>
+                <mxCell id="e15" edge="1" parent="1" source="stable_inlier" target="json_str">
+                    <mxGeometry relative="1" as="geometry" />
+                </mxCell>
+
+                <mxCell id="fig_label"
+                    value="&lt;b&gt;Figure 2:&lt;/b&gt; Level 1 Geoprocess Data Pathway and Pipeline Architecture."
+                    style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#333333;"
+                    vertex="1" parent="1">
+                    <mxGeometry x="150" y="530" width="600" height="30" as="geometry" />
+                </mxCell>
+
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

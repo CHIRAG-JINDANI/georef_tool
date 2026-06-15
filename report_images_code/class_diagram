@@ -1,0 +1,39 @@
+classDiagram
+    class DashboardComponent {
+        <<Frontend State Controller>>
+        -AppStage active_stage
+        -MapViewport current_viewport
+        -LogEntry[] logging_collections
+        -ProcessingResult final_result
+        +handleCaptureProxy()
+        +executePipelineProcessing()
+        +resetActiveSession()
+    }
+
+    class FastAPIProcessingRouter {
+        <<Server Endpoint Orchestrator>>
+        -ThreadPoolExecutor executor_pool
+        +parse_multipart_fields()
+        +allocate_background_threads()
+        +coordinate_async_event_loop()
+    }
+
+    class ComputerVisionPipelineProcessor {
+        <<Algorithmic Library>>
+        +apply_contrast_clahe_filter()
+        +extract_grid_sift_features()
+        +evaluate_flann_matches()
+        +fit_ransac_transformation()
+        +execute_affine_warp()
+    }
+
+    class GeospatialDataExporter {
+        <<GDAL/Metadata Translation>>
+        +compile_geotransform_matrix()
+        +build_geotiff_container()
+    }
+
+    %% Relationships mapping execution pathways
+    DashboardComponent ..> FastAPIProcessingRouter : Submits Multipart Forms (HTTP POST)
+    FastAPIProcessingRouter --> ComputerVisionPipelineProcessor : Delegates Matrix Functions
+    FastAPIProcessingRouter --> GeospatialDataExporter : Triggers Rasterio Translations

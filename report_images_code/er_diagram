@@ -1,0 +1,55 @@
+erDiagram
+    USER_SESSION {
+        string session_id PK "UUIDv4 token"
+        string target_status "IDLE, PROCESSING, PREVIEW, VALIDATED"
+    }
+    
+    MAP_VIEWPORT {
+        float center_latitude
+        float center_longitude
+        float zoom_level
+        float meters_per_pixel
+    }
+    
+    PROXY_IMAGE {
+        string resource_location "URL"
+        string pixel_extents "Width/Height"
+        string bounding_box "Spatial Bounds"
+    }
+    
+    UPLOADED_REFERENCE {
+        blob raw_binary_stream
+        string quality_config "Sharp, Medium, Blurry"
+        boolean mirror_axis_flags "Flip H/V"
+    }
+    
+    PROCESSING_RESULT {
+        int inlier_match_count
+        float precision_rmse
+        float precision_mae
+        string bounding_parameters
+        string final_base64_geotiff
+    }
+    
+    GCP_DATA {
+        int point_id PK
+        float source_x
+        float source_y
+        float target_x
+        float target_y
+        float dx
+        float dy
+        float residual_error
+    }
+
+    %% Relationships Mapping Volatile Memory Architecture
+    USER_SESSION ||--|| MAP_VIEWPORT : "captures context"
+    USER_SESSION ||--o| UPLOADED_REFERENCE : "manages"
+    USER_SESSION ||--o| PROCESSING_RESULT : "yields"
+    
+    MAP_VIEWPORT ||--|| PROXY_IMAGE : "defines extents for"
+    
+    PROXY_IMAGE ||--o| PROCESSING_RESULT : "processed with"
+    UPLOADED_REFERENCE ||--o| PROCESSING_RESULT : "processed with"
+    
+    PROCESSING_RESULT ||--o{ GCP_DATA : "contains"

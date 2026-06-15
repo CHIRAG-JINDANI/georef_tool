@@ -1,0 +1,66 @@
+<mxfile host="app.diagrams.net" modified="2026-06-15T12:00:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+  <diagram id="deployment_arch" name="Deployment Architecture">
+    <mxGraphModel dx="1000" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="920" pageHeight="600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="server_box" value="Server (Ubuntu 22.04)" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#333333;dashed=1;startSize=30;fontColor=#333333;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="360" y="60" width="260" height="260" as="geometry" />
+        </mxCell>
+
+        <mxCell id="browser" value="&lt;b&gt;Browser&lt;/b&gt;&lt;br&gt;Chrome / Leaflet" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="80" y="110" width="160" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="photon" value="&lt;b&gt;Photon API&lt;/b&gt;&lt;br&gt;Geocoding" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="80" y="320" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="nextjs" value="&lt;b&gt;Next.js :3000&lt;/b&gt;&lt;br&gt;UI + proxy rewrite" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#000000;" vertex="1" parent="server_box">
+          <mxGeometry x="50" y="50" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="fastapi" value="&lt;b&gt;FastAPI :8000&lt;/b&gt;&lt;br&gt;OpenCV processing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#000000;" vertex="1" parent="server_box">
+          <mxGeometry x="50" y="170" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="esri" value="&lt;b&gt;ESRI ArcGIS&lt;/b&gt;&lt;br&gt;Satellite tiles" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="680" y="320" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge_browser_next" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#333333;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="browser" target="nextjs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge_browser_photon" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#333333;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="browser" target="photon">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge_next_fastapi" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#333333;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="server_box" source="nextjs" target="fastapi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="label_api" value="&lt;i&gt;/api/py/*&lt;/i&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=#333333;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="edge_next_fastapi">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="edge_fastapi_esri" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#333333;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="fastapi" target="esri">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="490" y="280" />
+              <mxPoint x="760" y="280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="fig_label" value="&lt;b&gt;Figure 3:&lt;/b&gt; Server Deployment and External API Integration Architecture." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="160" y="420" width="600" height="30" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
